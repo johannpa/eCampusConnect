@@ -9,9 +9,9 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/courses", () => 
+app.MapGet("/courses", (CmsDatabaseContext db) => 
 {
-    
+    return db.Courses.ToList();
 });
 
 app.Run();
