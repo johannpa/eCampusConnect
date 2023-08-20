@@ -33,6 +33,21 @@ public class Course
     public int CourseType { get; set; }
 }
 
+
+public class CourseDto
+{
+    public int CourseId { get; set; }
+    public string CourseName { get; set; } = string.Empty;
+    public COURSE_TYPE CourseType { get; set; }
+}
+
+public enum COURSE_TYPE
+{
+    ENGINEERING = 1,
+    MEDICAL,
+    MANAGMENT
+}
+
 public class CmsDatabaseContext: DbContext
 {
     // It's working with that too
