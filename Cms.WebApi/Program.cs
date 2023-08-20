@@ -1,9 +1,10 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CmsDatabaseContext>(options => 
   options.UseInMemoryDatabase("CmsDatabase"));
-
+builder.Services.AddAutoMapper(typeof(CmsMapper));
 
 var app = builder.Build();
 
@@ -24,6 +25,16 @@ app.MapPost("/courses", async (Course course, CmsDatabaseContext db) =>
 });
 
 app.Run();
+
+
+public class CmsMapper: Profile
+{
+    public CmsMapper()
+    {
+        CreateMap<Course, CourseDto>();
+        CreateMap<CourseDto, Course>();
+    }
+}
 
 public class Course
 {
