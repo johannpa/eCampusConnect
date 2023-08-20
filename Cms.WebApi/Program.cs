@@ -11,7 +11,8 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/courses", (CmsDatabaseContext db) => 
 {
-    return db.Courses.ToList();
+    var result = db.Courses.ToList();
+    return Results.Ok(result);
 });
 
 app.Run();
