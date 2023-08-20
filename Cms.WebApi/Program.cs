@@ -9,9 +9,9 @@ var app = builder.Build();
 
 app.MapGet("/", () => "Hello World!");
 
-app.MapGet("/courses", (CmsDatabaseContext db) => 
+app.MapGet("/courses", async (CmsDatabaseContext db) => 
 {
-    var result = db.Courses.ToList();
+    var result = await db.Courses.ToListAsync();
     return Results.Ok(result);
 });
 
