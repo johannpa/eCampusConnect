@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<CmsDatabaseContext>(options => 
@@ -16,12 +17,15 @@ app.MapGet("/courses", async (CmsDatabaseContext db) =>
     return Results.Ok(result);
 });
 
-app.MapPost("/courses", async (Course course, CmsDatabaseContext db) =>
+app.MapPost("/courses", async (CourseDto courseDto, CmsDatabaseContext db, IMapper mapper) =>
 {
-    db.Courses.Add(course);
+    var newCourse = mapper.Map<Course>(courseDto);
+
+    db.Courses.Add(newCourse);
     await db.SaveChangesAsync();
 
-    return Results.Created($"/courses/{course.CourseId}", course);
+    var result = mapper.Map<CourseDto>(newCourse);
+    return Results.Created($"/courses/{result.CourseId}", result);
 });
 
 app.Run();
@@ -49,6 +53,9 @@ public class CourseDto
 {
     public int CourseId { get; set; }
     public string CourseName { get; set; } = string.Empty;
+    public int CourseDuration { get; set; }
+
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public COURSE_TYPE CourseType { get; set; }
 }
 
