@@ -14,20 +14,39 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/courses", async (CmsDatabaseContext db) => 
 {
-    var result = await db.Courses.ToListAsync();
-    return Results.Ok(result);
+    try
+    {
+        var result = await db.Courses.ToListAsync();
+        return Results.Ok(result);
+    }
+    catch (Exception ex)
+    {
+
+        //throw;
+        return Results.Problem(ex.Message);
+    }
 });
 
 //app.MapPost("/courses", async ([FromBody] CourseDto courseDto, [FromServices] CmsDatabaseContext db, [FromServices] IMapper mapper)
 app.MapPost("/courses", async ( CourseDto courseDto, CmsDatabaseContext db, IMapper mapper) =>
 {
-    var newCourse = mapper.Map<Course>(courseDto);
+    try
+    {
+        var newCourse = mapper.Map<Course>(courseDto);
 
-    db.Courses.Add(newCourse);
-    await db.SaveChangesAsync();
+        db.Courses.Add(newCourse);
+        await db.SaveChangesAsync();
 
-    var result = mapper.Map<CourseDto>(newCourse);
-    return Results.Created($"/courses/{result.CourseId}", result);
+        var result = mapper.Map<CourseDto>(newCourse);
+        return Results.Created($"/courses/{result.CourseId}", result);
+    }
+    catch (Exception ex)
+    {
+
+        //throw new InvalidOperationException();
+        //return Results.StatusCode(500);
+        return Results.Problem(ex.Message);
+    }
 });
 
 app.Run();
