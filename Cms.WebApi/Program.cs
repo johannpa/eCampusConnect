@@ -15,6 +15,14 @@ app.MapGet("/courses", async (CmsDatabaseContext db) =>
     return Results.Ok(result);
 });
 
+app.MapPost("/courses", async (Course course, CmsDatabaseContext db) =>
+{
+    db.Courses.Add(course);
+    await db.SaveChangesAsync();
+
+    return Results.Created($"/courses/{course.CourseId}", course);
+});
+
 app.Run();
 
 public class Course
