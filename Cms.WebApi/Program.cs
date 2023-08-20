@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -17,7 +18,8 @@ app.MapGet("/courses", async (CmsDatabaseContext db) =>
     return Results.Ok(result);
 });
 
-app.MapPost("/courses", async (CourseDto courseDto, CmsDatabaseContext db, IMapper mapper) =>
+//app.MapPost("/courses", async ([FromBody] CourseDto courseDto, [FromServices] CmsDatabaseContext db, [FromServices] IMapper mapper)
+app.MapPost("/courses", async ( CourseDto courseDto, CmsDatabaseContext db, IMapper mapper) =>
 {
     var newCourse = mapper.Map<Course>(courseDto);
 
