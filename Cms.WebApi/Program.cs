@@ -78,6 +78,22 @@ app.MapPut("/courses/{courseId}", async (int courseId, CourseDto courseDto, CmsD
     return Results.Ok(result);
 });
 
+
+app.MapDelete("/courses/{courseId}", async (int courseId, CmsDatabaseContext db, IMapper mapper) =>
+{
+    var course = await db.Courses.FindAsync(courseId);
+    if (course == null)
+    {
+        return Results.NotFound();
+    }
+
+    db.Courses.Remove(course);
+    await db.SaveChangesAsync();
+
+    var result = mapper.Map<CourseDto>(course);
+    return Results.Ok(result);
+});
+
 app.Run();
 
 
