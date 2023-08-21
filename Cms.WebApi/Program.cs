@@ -49,6 +49,18 @@ app.MapPost("/courses", async ( CourseDto courseDto, CmsDatabaseContext db, IMap
     }
 });
 
+app.MapGet("/courses/{courseId}", async (int courseId, CmsDatabaseContext db, IMapper mapper) =>
+{
+    var course = await db.Courses.FindAsync(courseId);
+    if(course == null)
+    {
+        return Results.NotFound();
+    }
+
+    var result = mapper.Map<CourseDto>(course); 
+    return Results.Ok(result);
+});
+
 app.Run();
 
 
